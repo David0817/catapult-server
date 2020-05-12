@@ -66,7 +66,7 @@ namespace catapult { namespace plugins {
 					return cache.sub<AccountStateCache>().createView()->size();
 				});
 				counters.emplace_back(utils::DiagnosticCounterId("ACNTST C HVA"), [&cache]() {
-					return cache.sub<AccountStateCache>().createView()->highValueAddresses().size();
+					return cache.sub<AccountStateCache>().createView()->highValueAccounts().addresses().size();
 				});
 			});
 		}
@@ -173,7 +173,8 @@ namespace catapult { namespace plugins {
 				.add(observers::CreateBeneficiaryObserver())
 				.add(observers::CreateTransactionFeeActivityObserver())
 				.add(observers::CreateHarvestFeeObserver(harvestFeeOptions, calculator))
-				.add(observers::CreateTotalTransactionsObserver());
+				.add(observers::CreateTotalTransactionsObserver())
+				.add(observers::CreateHighValueAccountObserver(observers::NotifyMode::Commit));
 		});
 
 		manager.addTransientObserverHook([&config](auto& builder) {
@@ -182,6 +183,7 @@ namespace catapult { namespace plugins {
 					importance::CreateRestoreImportanceCalculator());
 			builder
 				.add(std::move(pRecalculateImportancesObserver))
+				.add(observers::CreateHighValueAccountObserver(observers::NotifyMode::Rollback))
 				.add(observers::CreateBlockStatisticObserver(config.MaxDifficultyBlocks, config.DefaultDynamicFeeMultiplier))
 				.add(observers::CreateCacheBlockPruningObserver<cache::BlockStatisticCache>(
 						"BlockStatistic",
