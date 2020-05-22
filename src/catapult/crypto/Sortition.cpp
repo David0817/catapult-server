@@ -19,15 +19,8 @@
 **/
 
 #include "Sortition.h"
-#include "Vrf.h"
-#include <catapult/utils/Logging.h>
-
-#include <boost/serialization/nvp.hpp>// REMOVE
-
 #include <boost/math/distributions/binomial.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
 namespace bm = boost::math;
 namespace bmp = boost::math::policies;
@@ -52,11 +45,11 @@ namespace catapult { namespace crypto {
 	uint64_t Sortition(const Hash512& sortitionVrfHash, uint64_t tau, Amount stake, Amount totalPower) {
 		// 1. calculate hit - bswap, to treat it as big-endian
 		uint64_t num;
-		std::memcpy(&num, sortitionVrfHash.cbegin(), 8);
+		std::memcpy(&num, sortitionVrfHash.cbegin(), sizeof(uint64_t));
 		num = BSWAP64(num);
 		auto hit = static_cast<double>(num) / std::pow(2.0, 64);
 
-		// 3. calculate number of votes
+		// 2. calculate number of votes
 		auto rate = static_cast<double>(tau) / static_cast<double>(totalPower.unwrap());
 		auto numVotes = InverseCdf(static_cast<double>(stake.unwrap()), rate, hit);
 		return numVotes;

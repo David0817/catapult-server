@@ -28,16 +28,17 @@ namespace catapult { namespace crypto {
 #define TEST_CLASS SortitionTests
 
 	TEST(TEST_CLASS, InverseCdf_RoundsResultUp) {
+		// Arrange:
 		// (10, p) binomial distribution
 		// p = 0.3:
-		//   CDF | .0282| .1493| .3828| .6496| .8497| .9527| .9894| .9984| .9999| 1.0  | 1.0  |
-		//   PMF | .028 | .121 | .233 | .267 | .200 | .103 | .037 | .009 | .001 | .000 | .000 |
+		//   CDF |0.0282|0.1493|0.3828|0.6496|0.8497|0.9527|0.9894|0.9984|0.9999|1.0   |1.0   |
+		//   PMF |0.028 |0.121 |0.233 |0.267 |0.200 |0.103 |0.037 |0.009 |0.001 |0.000 |0.000 |
 		// p = 0.5
-		//   CDF | .0010| .0107| .0547| .1719| .3770| .6230| .8281| .9453| .9893| .9990| 1.0  |
-		//   PMF | .001 | .010 | .044 | .117 | .205 | .246 | .205 | .117 | .044 | .010 | .001 |
+		//   CDF |0.0010|0.0107|0.0547|0.1719|0.3770|0.6230|0.8281|0.9453|0.9893|0.9990|1.0   |
+		//   PMF |0.001 |0.010 |0.044 |0.117 |0.205 |0.246 |0.205 |0.117 |0.044 |0.010 |0.001 |
 		// p = 0.7:
-		//   CDF |~.0000| .0001| .0015| .0015| .0473| .1502| .3503| .6172| .8506| .9717| 1.0  |
-		//   PMF |~.0000| .0001| .001 | .009 | .036 | .010 | .200 | .266 | .233 | .121 | .028 |
+		//   CDF |~.0000|0.0001|0.0015|0.0015|0.0473|0.1502|0.3503|0.6172|0.8506|0.9717|1.0   |
+		//   PMF |~.0000|0.0001|0.001 |0.009 |0.036 |0.010 |0.200 |0.266 |0.233 |0.121 |0.028 |
 		//       | 0    | 1    | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   |
 		//
 		// Aligned for 0.64, p: 0.3 | 0.5 | 0.7
@@ -50,13 +51,13 @@ namespace catapult { namespace crypto {
 	}
 
 	namespace {
-		// Genearate random amounts between 100-300k
+		// Generate random amounts
 		auto GenerateAmounts(size_t numAccounts) {
 			std::vector<Amount> amounts;
 			amounts.resize(numAccounts);
 
 			std::generate(amounts.begin(), amounts.end(), []() {
-				return Amount(2'000'000'000 + test::Random() % 1'000'000'000);
+				return Amount(200'000'000 + test::Random() % 100'000'000);
 			});
 
 			return amounts;
@@ -65,11 +66,11 @@ namespace catapult { namespace crypto {
 
 	TEST(TEST_CLASS, Sortition_Sample_Data) {
 		// Arrange:
-		const auto Cert_Committee_Threshold = 2117u;
-		const auto Cert_Committee_Tau = 2990u;
+		constexpr auto Committee_Threshold = 2117u;
+		constexpr auto Committee_Tau = 2990u;
 
 		auto amounts = GenerateAmounts(2000);
-		auto totalPower = utils::Sum(amounts, [](const auto& amount) { return amount; });
+		auto totalPower = utils::Sum(amounts, [](auto amount) { return amount; });
 
 		// Act:
 		auto collectedThreshold = 0u;
@@ -79,15 +80,15 @@ namespace catapult { namespace crypto {
 			// generating random hash per user is ok
 			auto vrfHash = test::GenerateRandomByteArray<Hash512>();
 
-			auto value = Sortition(vrfHash, Cert_Committee_Tau, amount, totalPower);
+			auto value = Sortition(vrfHash, Committee_Tau, amount, totalPower);
 			collectedThreshold += value;
 			if (value)
 				++votingAccounts;
 		}
 
 		// Assert:
-		EXPECT_GT(collectedThreshold, Cert_Committee_Threshold);
-		CATAPULT_LOG(info) << "collected threshold " << collectedThreshold;
-		CATAPULT_LOG(info) << "voting accounts " << votingAccounts;
+		EXPECT_GT(collectedThreshold, Committee_Threshold);
+		CATAPULT_LOG(debug) << "collected threshold " << collectedThreshold;
+		CATAPULT_LOG(debug) << "voting accounts " << votingAccounts;
 	}
 }}
