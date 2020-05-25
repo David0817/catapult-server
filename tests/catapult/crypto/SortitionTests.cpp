@@ -51,7 +51,7 @@ namespace catapult { namespace crypto {
 	}
 
 	namespace {
-		// Generate random amounts
+		// generate random amounts
 		auto GenerateAmounts(size_t numAccounts) {
 			std::vector<Amount> amounts;
 			amounts.resize(numAccounts);

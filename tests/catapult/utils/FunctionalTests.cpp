@@ -163,7 +163,7 @@ namespace catapult { namespace utils {
 		EXPECT_EQ(131, result);
 	}
 
-	TEST(TEST_CLASS, SumReturnsProperValue_MultipleBaseValues) {
+	TEST(TEST_CLASS, SumReturnsProperValue_MultipleBaseValueElements) {
 		// Arrange:
 		std::vector<Height> data{ Height(8), Height(13), Height(21), Height(34), Height(55) };
 
