@@ -682,13 +682,13 @@ namespace catapult { namespace consumers {
 
 	TEST(TEST_CLASS, RemoteChainWithHeightDifferenceEqualToMaxRollbackBlocksIsValidForRemotePullSource) {
 		// Assert: (this test only makes sense for Remote_Pull because it is the only source that allows multiple block rollbacks)
-		AssertValidHeight(Height(100), Height(100 - Max_Rollback_Blocks), 4, InputSource::Remote_Pull);
+		AssertValidHeight(Height(100), Height(100 - Max_Rollback_Blocks + 1), 4, InputSource::Remote_Pull);
 	}
 
 	TEST(TEST_CLASS, RemoteChainWithHeightDifferencGreaterThanMaxRollbackBlocksIsInvalidForRemotePullSource) {
 		// Assert: (this test only makes sense for Remote_Pull because it is the only source that allows multiple block rollbacks)
 		auto expectedResult = Failure_Consumer_Remote_Chain_Too_Far_Behind;
-		AssertInvalidHeightWithResult(Height(100), Height(100 - Max_Rollback_Blocks - 1), 4, InputSource::Remote_Pull, expectedResult);
+		AssertInvalidHeightWithResult(Height(100), Height(100 - Max_Rollback_Blocks), 4, InputSource::Remote_Pull, expectedResult);
 		AssertInvalidHeightWithResult(Height(100), Height(100 - Max_Rollback_Blocks - 10), 4, InputSource::Remote_Pull, expectedResult);
 	}
 
