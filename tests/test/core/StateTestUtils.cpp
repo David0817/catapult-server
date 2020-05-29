@@ -23,8 +23,18 @@
 
 namespace catapult { namespace test {
 
+	state::CatapultState CreateDeterministicCatapultState() {
+		auto state = state::CatapultState();
+		state.LastRecalculationHeight = model::ImportanceHeight(12345);
+		state.LastFinalizedHeight = Height(9876);
+		state.DynamicFeeMultiplier = BlockFeeMultiplier(334455);
+		state.NumTotalTransactions = 7654321;
+		return state;
+	}
+
 	void AssertEqual(const state::CatapultState& expected, const state::CatapultState& actual, const std::string& message) {
 		EXPECT_EQ(expected.LastRecalculationHeight, actual.LastRecalculationHeight) << message;
+		EXPECT_EQ(expected.LastFinalizedHeight, actual.LastFinalizedHeight) << message;
 		EXPECT_EQ(expected.DynamicFeeMultiplier, actual.DynamicFeeMultiplier) << message;
 		EXPECT_EQ(expected.NumTotalTransactions, actual.NumTotalTransactions) << message;
 	}

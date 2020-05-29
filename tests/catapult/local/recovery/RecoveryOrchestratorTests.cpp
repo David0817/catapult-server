@@ -32,6 +32,7 @@
 #include "tests/catapult/local/recovery/test/FilechainTestUtils.h"
 #include "tests/test/core/BlockStorageTestUtils.h"
 #include "tests/test/core/BlockTestUtils.h"
+#include "tests/test/core/StateTestUtils.h"
 #include "tests/test/core/StorageTestUtils.h"
 #include "tests/test/core/TransactionStatusTestUtils.h"
 #include "tests/test/local/BlockStateHash.h"
@@ -91,9 +92,7 @@ namespace catapult { namespace local {
 		cache::SupplementalData CreateDeterministicSupplementalData() {
 			cache::SupplementalData supplementalData;
 			supplementalData.ChainScore = model::ChainScore(0x1234567890ABCDEF, 0xFEDCBA0987654321);
-			supplementalData.State.LastRecalculationHeight = model::ImportanceHeight(12345);
-			supplementalData.State.DynamicFeeMultiplier = BlockFeeMultiplier(334455);
-			supplementalData.State.NumTotalTransactions = 7654321;
+			supplementalData.State = test::CreateDeterministicCatapultState();
 			return supplementalData;
 		}
 

@@ -23,6 +23,9 @@
 
 namespace catapult { namespace test {
 
+	/// Creates deterministic catapult state.
+	state::CatapultState CreateDeterministicCatapultState();
+
 	/// Asserts that catapult state \a actual is equal to \a expected with optional \a message.
 	void AssertEqual(const state::CatapultState& expected, const state::CatapultState& actual, const std::string& message = "");
 }}
