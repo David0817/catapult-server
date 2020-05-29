@@ -245,6 +245,24 @@ namespace catapult { namespace model {
 		uint32_t NumTransactions;
 	};
 
+	/// Notifies the arrival of a finalized block.
+	struct FinalizedBlockNotification : public Notification {
+	public:
+		/// Matching notification type.
+		static constexpr auto Notification_Type = Core_Finalized_Block_Notification;
+
+	public:
+		/// Creates a block notification around \a finalizedHeight.
+		explicit FinalizedBlockNotification(Height finalizedHeight)
+				: Notification(Notification_Type, sizeof(FinalizedBlockNotification))
+				, FinalizedHeight(finalizedHeight)
+		{}
+
+	public:
+		/// Height of the finalized block.
+		Height FinalizedHeight;
+	};
+
 	// endregion
 
 	// region transaction

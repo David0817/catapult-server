@@ -135,6 +135,9 @@ namespace catapult { namespace model {
 	/// Key link action was received.
 	DEFINE_CORE_NOTIFICATION(Key_Link_Action, 0x0011, Validator);
 
+	/// Block was finalized.
+	DEFINE_CORE_NOTIFICATION(Finalized_Block, 0x0012, Observer);
+
 #undef DEFINE_CORE_NOTIFICATION
 
 	// endregion
