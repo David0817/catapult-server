@@ -183,10 +183,7 @@ namespace catapult { namespace plugins {
 			builder
 				.add(std::move(pRecalculateImportancesObserver))
 				.add(observers::CreateBlockStatisticObserver(config.MaxDifficultyBlocks, config.DefaultDynamicFeeMultiplier))
-				.add(observers::CreateCacheBlockPruningObserver<cache::BlockStatisticCache>(
-						"BlockStatistic",
-						config.BlockPruneInterval,
-						BlockDuration()));
+				.add(observers::CreateCacheBlockPruningObserver<cache::BlockStatisticCache>("BlockStatistic", 1, BlockDuration()));
 		});
 
 		RegisterVotingKeyLinkTransaction(manager);
