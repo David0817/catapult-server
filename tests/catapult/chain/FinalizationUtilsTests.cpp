@@ -30,11 +30,11 @@ namespace catapult { namespace chain {
 #define TEST_CLASS FinalizationUtilsTests
 
 	namespace {
-		// region MockFinalizedHeightBlockStorage
+		// region MockFinalizedChainHeightBlockStorage
 
-		class MockFinalizedHeightBlockStorage : public mocks::UnsupportedBlockStorage {
+		class MockFinalizedChainHeightBlockStorage : public mocks::UnsupportedBlockStorage {
 		public:
-			MockFinalizedHeightBlockStorage(Height chainHeight, Height finalizedChainHeight)
+			MockFinalizedChainHeightBlockStorage(Height chainHeight, Height finalizedChainHeight)
 					: m_chainHeight(chainHeight)
 					, m_finalizedChainHeight(finalizedChainHeight)
 			{}
@@ -48,6 +48,7 @@ namespace catapult { namespace chain {
 				return m_finalizedChainHeight;
 			}
 
+			// loadBlockElement needs to be implemented because BlockStorageCache loads the tail block into its cache
 			std::shared_ptr<const model::BlockElement> loadBlockElement(Height height) const override {
 				auto pStorage = mocks::CreateMemoryBlockStorage(0);
 
@@ -69,7 +70,7 @@ namespace catapult { namespace chain {
 
 		Height GetFinalizedChainHeight(Height chainHeight, Height finalizedChainHeight, uint32_t maxRollbackBlocks) {
 			auto storage = io::BlockStorageCache(
-					std::make_unique<MockFinalizedHeightBlockStorage>(chainHeight, finalizedChainHeight),
+					std::make_unique<MockFinalizedChainHeightBlockStorage>(chainHeight, finalizedChainHeight),
 					mocks::CreateMemoryBlockStorage(0));
 			return chain::GetFinalizedChainHeight(storage.view(), maxRollbackBlocks);
 		}
@@ -108,5 +109,4 @@ namespace catapult { namespace chain {
 		EXPECT_EQ(Height(50), GetFinalizedChainHeight(Height(75), Height(50), Max_Rollback_Blocks));
 		EXPECT_EQ(Height(75), GetFinalizedChainHeight(Height(50), Height(75), Max_Rollback_Blocks));
 	}
-
 }}

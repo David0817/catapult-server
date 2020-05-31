@@ -223,7 +223,7 @@ namespace catapult { namespace cache {
 		const auto& subCacheMerkleRoots = view.calculateStateHash(Height(123)).SubCacheMerkleRoots;
 		EXPECT_EQ(3u, subCacheMerkleRoots.size());
 
-		// - adjust expected hashes because SimpleCache SimpleCache::updateMerkleRoot changes the first byte of the merkle root
+		// - adjust expected hashes because SimpleCache::updateMerkleRoot changes the first byte of the merkle root
 		for (auto& hash : hashes)
 			hash[0] = 123;
 

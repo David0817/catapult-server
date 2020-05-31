@@ -1190,7 +1190,7 @@ namespace catapult { namespace consumers {
 		// Assert:
 		test::AssertContinued(result);
 
-		// - pruning was triggered on the cache (lower_bound should caus heights less than 5 to be pruned, so { 5, 6, 7 } are preserved)
+		// - pruning was triggered on the cache (lower_bound should cause heights less than 5 to be pruned, so { 5, 6, 7 } are preserved)
 		// - 7 (seeded entries); 0 (added entries, no real observer used); 5 (local finalized chain height)
 		EXPECT_EQ(3u, context.Cache.sub<cache::BlockStatisticCache>().createView()->size());
 	}

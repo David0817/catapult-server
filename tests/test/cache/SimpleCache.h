@@ -184,6 +184,7 @@ namespace catapult { namespace test {
 			*m_pMerkleRoot = merkleRoot;
 		}
 
+		/// Prunes the cache at \a height.
 		void prune(Height height) {
 			// change the second byte
 			(*m_pMerkleRoot)[1] = static_cast<uint8_t>(height.unwrap());
