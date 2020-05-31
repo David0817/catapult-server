@@ -54,7 +54,7 @@ namespace catapult { namespace consumers {
 		public:
 			SyncState() = default;
 
-			explicit SyncState(cache::CatapultCache& cache, Height localFinalizedChainHeight)
+			SyncState(cache::CatapultCache& cache, Height localFinalizedChainHeight)
 					: m_pOriginalCache(&cache)
 					, m_pCacheDelta(std::make_unique<cache::CatapultCacheDelta>(cache.createDelta()))
 					, m_localFinalizedChainHeight(localFinalizedChainHeight)

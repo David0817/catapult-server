@@ -20,9 +20,9 @@
 
 #include "catapult/chain/FinalizationUtils.h"
 #include "catapult/io/BlockStorageCache.h"
+#include "tests/test/core/BlockTestUtils.h"
 #include "tests/test/core/mocks/MockBlockStorage.h"
 #include "tests/test/core/mocks/MockMemoryBlockStorage.h"
-#include "tests/test/core/BlockTestUtils.h"
 #include "tests/TestHarness.h"
 
 namespace catapult { namespace chain {
@@ -34,7 +34,7 @@ namespace catapult { namespace chain {
 
 		class MockFinalizedHeightBlockStorage : public mocks::UnsupportedBlockStorage {
 		public:
-			explicit MockFinalizedHeightBlockStorage(Height chainHeight, Height finalizedChainHeight)
+			MockFinalizedHeightBlockStorage(Height chainHeight, Height finalizedChainHeight)
 					: m_chainHeight(chainHeight)
 					, m_finalizedChainHeight(finalizedChainHeight)
 			{}
