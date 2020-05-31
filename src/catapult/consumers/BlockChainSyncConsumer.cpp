@@ -96,6 +96,7 @@ namespace catapult { namespace consumers {
 			}
 
 			void commit(Height height) {
+				m_pCacheDelta->prune(m_localFinalizedChainHeight);
 				m_pOriginalCache->commit(height);
 				m_pCacheDelta.reset(); // release the delta after commit so that the UT updater can acquire a lock
 			}
