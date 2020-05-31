@@ -53,7 +53,6 @@ namespace catapult { namespace extensions {
 			"VrfKeyLinkObserver",
 			"RecalculateImportancesObserver",
 			"BlockStatisticObserver",
-			"BlockStatisticPruningObserver"
 		};
 		EXPECT_EQ(expectedObserverNames, config.pObserver->names());
 
