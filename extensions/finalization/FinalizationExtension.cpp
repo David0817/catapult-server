@@ -31,7 +31,8 @@ namespace catapult { namespace finalization {
 			auto config = FinalizationConfiguration::LoadFromPath(resourcesPath);
 
 			// register other services
-			extensionManager.addServiceRegistrar(CreateFinalizationDispatcherServiceRegistrar());
+			auto& extensionManager = bootstrapper.extensionManager();
+			extensionManager.addServiceRegistrar(CreateFinalizationDispatcherServiceRegistrar(config));
 		}
 	}
 }}

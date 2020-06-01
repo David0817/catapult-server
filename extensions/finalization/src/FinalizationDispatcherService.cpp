@@ -45,7 +45,7 @@ namespace catapult { namespace finalization {
 		};
 	}
 
-	std::unique_ptr<extensions::ServiceRegistrar> CreateFinalizationDispatcherServiceRegistrar() {
+	std::unique_ptr<extensions::ServiceRegistrar> CreateFinalizationDispatcherServiceRegistrar(const FinalizationConfiguration&) {
 		return std::make_unique<FinalizationDispatcherServiceRegistrar>();
 	}
 }}

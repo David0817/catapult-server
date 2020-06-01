@@ -19,6 +19,7 @@
 **/
 
 #include "finalization/src/FinalizationDispatcherService.h"
+#include "finalization/src/FinalizationConfiguration.h"
 #include "tests/test/local/ServiceLocatorTestContext.h"
 #include "tests/test/local/ServiceTestUtils.h"
 #include "tests/TestHarness.h"
@@ -37,7 +38,9 @@ namespace catapult { namespace finalization {
 		constexpr auto Sentinel_Counter_Value = extensions::ServiceLocator::Sentinel_Counter_Value;
 
 		struct FinalizationDispatcherServiceTraits {
-			static constexpr auto CreateRegistrar = CreateFinalizationDispatcherServiceRegistrar;
+			static auto CreateRegistrar() {
+				return CreateFinalizationDispatcherServiceRegistrar(FinalizationConfiguration::Uninitialized());
+			}
 		};
 
 		using TestContext = test::ServiceLocatorTestContext<FinalizationDispatcherServiceTraits>;
