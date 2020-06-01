@@ -19,6 +19,7 @@
 **/
 
 #include "BalanceHistory.h"
+#include <algorithm>
 
 namespace catapult { namespace state {
 
