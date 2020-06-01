@@ -96,8 +96,7 @@ namespace catapult { namespace consumers {
 			}
 
 			void commit(Height height) {
-				m_pCacheDelta->dependentState()->LastFinalizedHeight = m_localFinalizedChainHeight;
-				auto& lastFinalizedChainHeight = m_pCacheDelta->dependentState()->LastFinalizedHeight;
+				auto& lastFinalizedChainHeight = m_pCacheDelta->dependentState().LastFinalizedHeight;
 				pruneRange(lastFinalizedChainHeight, m_localFinalizedChainHeight);
 				lastFinalizedChainHeight = m_localFinalizedChainHeight;
 
@@ -107,7 +106,7 @@ namespace catapult { namespace consumers {
 
 		private:
 			void pruneRange(Height startHeight, Height endHeight) {
-				for (auto height = startHeight; startHeight < endHeight; height = height + Height(1))
+				for (auto height = startHeight; height <= endHeight; height = height + Height(1))
 					m_pCacheDelta->prune(height);
 			}
 
