@@ -1347,7 +1347,7 @@ namespace catapult { namespace cache {
 		options.MinVoterBalance = Amount(1'000'000);
 		AccountStateCache cache(CacheConfiguration(), options);
 
-		// - prepare delta with 3/3 accounts with sufficient (voter) balance
+		// - seed cache with 3/3 accounts with sufficient (voter) balance
 		std::vector<Address> addresses;
 		{
 			auto delta = cache.createDelta();
@@ -1361,13 +1361,13 @@ namespace catapult { namespace cache {
 		delta->find(addresses[1]).get().Balances.debit(Harvesting_Mosaic_Id, Amount(300'000));
 		delta->updateHighValueAccounts(Height(4));
 
-		// Sanity: before prune all three accounts are still tracked
+		// Sanity: before pruning, all three accounts are still tracked
 		EXPECT_EQ(3u, delta->highValueAccounts().balanceHistories().size());
 
-		// Act: this should prune the account decreased below the threshold
+		// Act:
 		delta->prune(Height(4));
 
-		// Assert:
+		// Assert: the account decreased below the threshold should be removed
 		EXPECT_EQ(2u, delta->highValueAccounts().balanceHistories().size());
 	}
 

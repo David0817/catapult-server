@@ -677,7 +677,7 @@ namespace catapult { namespace cache {
 			auto addedAddresses = AddAccountsWithBalances(deltas.Added, {
 				Amount(2'100'000),
 				Amount(900'000),
-				Amount(2'000'000),
+				Amount(2'000'001),
 				Amount(800'000),
 				Amount(2'200'000),
 				Amount(2'400'000),
@@ -693,7 +693,7 @@ namespace catapult { namespace cache {
 
 			// - modify four [5 match {0, 1, 3, 4, 5}]
 			Credit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[1])).first->second, Amount(1'200'000));
-			Debit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[2])).first->second, Amount(1));
+			Debit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[2])).first->second, Amount(2));
 			Credit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[3])).first->second, Amount(1'250'000));
 			Debit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[6])).first->second, Amount(300'001));
 
@@ -701,7 +701,7 @@ namespace catapult { namespace cache {
 			updater.update(deltas.deltas());
 
 			// - modify two [5 match {0, 1, 2, 4, 5}]
-			Credit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[2])).first->second, Amount(2));
+			Credit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[2])).first->second, Amount(1));
 			Debit(deltas.Copied.insert(*deltas.Added.find(addedAddresses[3])).first->second, Amount(2'000'000));
 
 			updater.setHeight(Height(5));
@@ -718,35 +718,30 @@ namespace catapult { namespace cache {
 			action(updater, addedAddresses);
 		}
 
-		void AssertPruneTestNoPruning(const HighValueAccountsUpdater& updater, const std::vector<Address>& addedAddresses) {
-			// Assert:
-			auto expectedBalanceHistories = test::GenerateBalanceHistories({
-				{ addedAddresses[0], { { Height(3), Amount(2'100'000) } } },
-				{ addedAddresses[1], { { Height(4), Amount(2'100'000) }, { Height(6), Amount() } } },
-				{
-					addedAddresses[2],
-					{ { Height(3), Amount(2'000'000) }, { Height(4), Amount(1'999'999) }, { Height(5), Amount(2'000'001) } }
-				},
-				{ addedAddresses[3], { { Height(4), Amount(2'050'000) }, { Height(5), Amount(50'000) } } },
-				{ addedAddresses[4], { { Height(3), Amount(2'200'000) }, { Height(6), Amount() } } },
-				{ addedAddresses[5], { { Height(3), Amount(2'400'000) } } },
-				{ addedAddresses[6], { { Height(3), Amount(2'300'000) }, { Height(4), Amount(1'999'999) } } }
-			});
-
-			test::AssertEqual(expectedBalanceHistories, updater.balanceHistories());
-
-			// Sanity:
-			EXPECT_EQ(4u, updater.addresses().size());
-			EXPECT_TRUE(updater.removedAddresses().empty());
-		}
-
 		void AssertPruneHasNoEffect(Height height) {
 			// Act:
 			RunPruneTest([height](auto& updater, const auto& addedAddresses) {
 				updater.prune(height);
 
 				// Assert:
-				AssertPruneTestNoPruning(updater, addedAddresses);
+				auto expectedBalanceHistories = test::GenerateBalanceHistories({
+					{ addedAddresses[0], { { Height(3), Amount(2'100'000) } } },
+					{ addedAddresses[1], { { Height(4), Amount(2'100'000) }, { Height(6), Amount() } } },
+					{
+						addedAddresses[2],
+						{ { Height(3), Amount(2'000'001) }, { Height(4), Amount(1'999'999) }, { Height(5), Amount(2'000'000) } }
+					},
+					{ addedAddresses[3], { { Height(4), Amount(2'050'000) }, { Height(5), Amount(50'000) } } },
+					{ addedAddresses[4], { { Height(3), Amount(2'200'000) }, { Height(6), Amount() } } },
+					{ addedAddresses[5], { { Height(3), Amount(2'400'000) } } },
+					{ addedAddresses[6], { { Height(3), Amount(2'300'000) }, { Height(4), Amount(1'999'999) } } }
+				});
+
+				test::AssertEqual(expectedBalanceHistories, updater.balanceHistories());
+
+				// Sanity:
+				EXPECT_EQ(4u, updater.addresses().size());
+				EXPECT_TRUE(updater.removedAddresses().empty());
 			});
 		}
 	}
@@ -755,7 +750,7 @@ namespace catapult { namespace cache {
 		AssertPruneHasNoEffect(Height(2));
 	}
 
-	TEST(TEST_CLASS, Updater_PruneDoesNotAffectHistoriesWithHeightEqualThanPruneHeight) {
+	TEST(TEST_CLASS, Updater_PruneDoesNotAffectHistoriesWithHeightEqualToPruneHeight) {
 		AssertPruneHasNoEffect(Height(3));
 	}
 
@@ -768,7 +763,7 @@ namespace catapult { namespace cache {
 			auto expectedBalanceHistories = test::GenerateBalanceHistories({
 				{ addedAddresses[0], { { Height(4), Amount(2'100'000) } } },
 				{ addedAddresses[1], { { Height(4), Amount(2'100'000) }, { Height(6), Amount() } } },
-				{ addedAddresses[2], { { Height(4), Amount(1'999'999) }, { Height(5), Amount(2'000'001) } } },
+				{ addedAddresses[2], { { Height(4), Amount(1'999'999) }, { Height(5), Amount(2'000'000) } } },
 				{ addedAddresses[3], { { Height(4), Amount(2'050'000) }, { Height(5), Amount(50'000) } } },
 				{ addedAddresses[4], { { Height(4), Amount(2'200'000) }, { Height(6), Amount() } } },
 				{ addedAddresses[5], { { Height(4), Amount(2'400'000) } } }
@@ -791,7 +786,7 @@ namespace catapult { namespace cache {
 			auto expectedBalanceHistories = test::GenerateBalanceHistories({
 				{ addedAddresses[0], { { Height(5), Amount(2'100'000) } } },
 				{ addedAddresses[1], { { Height(5), Amount(2'100'000) }, { Height(6), Amount() } } },
-				{ addedAddresses[2], { { Height(5), Amount(2'000'001) } } },
+				{ addedAddresses[2], { { Height(5), Amount(2'000'000) } } },
 				{ addedAddresses[4], { { Height(5), Amount(2'200'000) }, { Height(6), Amount() } } },
 				{ addedAddresses[5], { { Height(5), Amount(2'400'000) } } }
 			});
@@ -813,7 +808,7 @@ namespace catapult { namespace cache {
 				// Assert:
 				auto expectedBalanceHistories = test::GenerateBalanceHistories({
 					{ addedAddresses[0], { { height, Amount(2'100'000) } } },
-					{ addedAddresses[2], { { height, Amount(2'000'001) } } },
+					{ addedAddresses[2], { { height, Amount(2'000'000) } } },
 					{ addedAddresses[5], { { height, Amount(2'400'000) } } }
 				});
 
@@ -830,7 +825,7 @@ namespace catapult { namespace cache {
 		AssertPruneTerminal(Height(6));
 	}
 
-	TEST(TEST_CLASS, Updater_PruneCanNeverPruneValuesLargerThanMinBalance) {
+	TEST(TEST_CLASS, Updater_PruneCanNeverPruneValuesAtLeastMinBalance) {
 		AssertPruneTerminal(Height(101));
 	}
 
