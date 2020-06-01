@@ -92,7 +92,7 @@ namespace catapult { namespace local {
 		cache::SupplementalData CreateSupplementalDataWithDeterministicChainScore() {
 			cache::SupplementalData supplementalData;
 			supplementalData.ChainScore = model::ChainScore(0x1234567890ABCDEF, 0xFEDCBA0987654321);
-			supplementalData.State = test::CreateDeterministicCatapultState();
+			supplementalData.State = test::CreateRandomCatapultState();
 			return supplementalData;
 		}
 
