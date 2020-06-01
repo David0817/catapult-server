@@ -718,9 +718,7 @@ namespace catapult { namespace cache {
 			action(updater, addedAddresses);
 		}
 
-		void AssertPruneTestNoPruning(
-				const HighValueAccountsUpdater& updater,
-				const std::vector<Address>& addedAddresses) {
+		void AssertPruneTestNoPruning(const HighValueAccountsUpdater& updater, const std::vector<Address>& addedAddresses) {
 			// Assert:
 			auto expectedBalanceHistories = test::GenerateBalanceHistories({
 				{ addedAddresses[0], { { Height(3), Amount(2'100'000) } } },
