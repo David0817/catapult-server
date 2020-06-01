@@ -23,6 +23,9 @@
 
 namespace catapult { namespace test {
 
+	/// Creates random catapult state.
+	state::CatapultState CreateRandomCatapultState();
+
 	/// Creates deterministic catapult state.
 	state::CatapultState CreateDeterministicCatapultState();
 

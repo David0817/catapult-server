@@ -23,6 +23,15 @@
 
 namespace catapult { namespace test {
 
+	state::CatapultState CreateRandomCatapultState() {
+		auto state = state::CatapultState();
+		state.LastRecalculationHeight = test::GenerateRandomValue<model::ImportanceHeight>();
+		state.LastFinalizedHeight = test::GenerateRandomValue<Height>();
+		state.DynamicFeeMultiplier = test::GenerateRandomValue<BlockFeeMultiplier>();
+		state.NumTotalTransactions = test::Random();
+		return state;
+	}
+
 	state::CatapultState CreateDeterministicCatapultState() {
 		auto state = state::CatapultState();
 		state.LastRecalculationHeight = model::ImportanceHeight(12345);

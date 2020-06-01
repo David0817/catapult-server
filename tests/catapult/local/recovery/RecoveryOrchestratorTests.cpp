@@ -89,7 +89,7 @@ namespace catapult { namespace local {
 
 		// region state saving
 
-		cache::SupplementalData CreateDeterministicSupplementalData() {
+		cache::SupplementalData CreateSupplementalDataWithDeterministicChainScore() {
 			cache::SupplementalData supplementalData;
 			supplementalData.ChainScore = model::ChainScore(0x1234567890ABCDEF, 0xFEDCBA0987654321);
 			supplementalData.State = test::CreateDeterministicCatapultState();
@@ -132,7 +132,7 @@ namespace catapult { namespace local {
 			if (Height() == cacheHeight)
 				return;
 
-			auto supplementalData = CreateDeterministicSupplementalData();
+			auto supplementalData = CreateSupplementalDataWithDeterministicChainScore();
 
 			// - seed with nemesis block, so that nemesis accounts have proper balances
 			test::LocalNodeTestState state(pluginManager.createCache());

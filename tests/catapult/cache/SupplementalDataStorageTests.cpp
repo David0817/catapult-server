@@ -20,6 +20,7 @@
 
 #include "catapult/cache/SupplementalDataStorage.h"
 #include "catapult/cache/SupplementalData.h"
+#include "tests/test/core/StateTestUtils.h"
 #include "tests/test/core/mocks/MockMemoryStream.h"
 #include "tests/TestHarness.h"
 
@@ -38,11 +39,8 @@ namespace catapult { namespace cache {
 
 		// - create random data
 		SupplementalData data;
-		data.State.LastRecalculationHeight = test::GenerateRandomValue<model::ImportanceHeight>();
-		data.State.LastFinalizedHeight = test::GenerateRandomValue<Height>();
-		data.State.DynamicFeeMultiplier = test::GenerateRandomValue<BlockFeeMultiplier>();
-		data.State.NumTotalTransactions = test::Random();
 		data.ChainScore = model::ChainScore(test::Random(), test::Random());
+		data.State = test::CreateRandomCatapultState();
 		auto chainHeight = test::GenerateRandomValue<Height>();
 
 		// Act:
