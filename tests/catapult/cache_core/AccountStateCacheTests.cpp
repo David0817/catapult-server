@@ -1367,7 +1367,7 @@ namespace catapult { namespace cache {
 		// Act:
 		delta->prune(Height(4));
 
-		// Assert: the account decreased below the threshold should be removed
+		// Assert: the account decreased below the threshold should be untracked
 		EXPECT_EQ(2u, delta->highValueAccounts().balanceHistories().size());
 	}
 
