@@ -825,7 +825,7 @@ namespace catapult { namespace cache {
 		AssertPruneTerminal(Height(6));
 	}
 
-	TEST(TEST_CLASS, Updater_PruneCanNeverPruneValuesAtLeastMinBalance) {
+	TEST(TEST_CLASS, Updater_PruneCanNeverPruneHistoriesHavingAtLeastMinBalance) {
 		AssertPruneTerminal(Height(101));
 	}
 
